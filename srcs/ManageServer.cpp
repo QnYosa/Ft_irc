@@ -14,7 +14,7 @@ static void	addClient(int client_socket, std::vector<pollfd> &poll_fds)
 	client_pollfd.fd = client_socket;
 	client_pollfd.events = POLLIN | POLLOUT;
 	poll_fds.push_back(client_pollfd);
-	std::cout << PURPLE << "ADDED CLIENT SUCCESSFULLY" << RESET << std::endl;
+	std::cout << PURPLE << "CLIENT ADDED SUCCESSFULLY" << RESET << std::endl;
 }
 
 static void	tooManyClients(int client_socket)
@@ -127,7 +127,8 @@ int		Server::manageServerLoop()
 					}
 					else
 					{
-						print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
+						addClientToTmp(it->fd, message);
+						// print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
 						// parsing 
 						// send(it->fd, message, strlen(message) + 1, 0);
 						// print("Send : ", it->fd, message);

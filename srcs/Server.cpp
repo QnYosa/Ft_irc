@@ -76,3 +76,39 @@ int		Server::launchServer()
 	return (SUCCESS);
 }
 
+void	Server::fillClient(std::string const &line)
+{
+	// "NICK"
+		// setnick();
+	// USER
+		// setuser();
+	
+	// 
+}
+
+void	Server::addClientToTmp(int const &client_fd, char *message)
+{
+	std::string msg = message;
+	std::string	delimiter = "\n";
+	int pos = 0;
+	std::string	substr;
+	std::vector<std::string> lines;
+
+	int i = 0;
+	while ((pos = msg.find(delimiter)) != std::string::npos)
+	{
+		substr = msg.substr(0, pos);
+		// std::cout << "line = " << RED << substr << RESET << std::endl;
+		std::cout << "i = " << RED << i << RESET << std::endl;
+		lines.push_back(substr);
+		msg.erase(0, pos + delimiter.length());
+		i++;
+	}
+	Client	client(client_fd);
+	for (int i = 0; i != lines.size(); i++)
+	{
+		std::cout  << RED << "line = " << RESET << lines[i] << std::endl; // on recupere bien chaque lignes
+		// fillClient(); 
+	}
+	// _tmpClients.insert(std::pair<int, Client>(client_fd, client));
+}

@@ -6,9 +6,12 @@
 class Client
 {
 	private:
-		pollfd	_client_poll_fd;
+		// pollfd	_client_poll_fd;
+		int		_client_fd;
+		std::string	_nickname;
+		std::string	_fullname;
 	public:
-		Client(pollfd client_poll_fd);
+		Client(int client_fd);
 		~Client();
 };
 
