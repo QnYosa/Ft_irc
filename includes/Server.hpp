@@ -7,20 +7,21 @@
 class Server
 {
 	private:
-		struct addrinfo			_hints;
-		struct addrinfo			*_servinfo;
-		std::map<int, Client>	_clients;
-		std::map<int, Client>	_tmpClients;
-		int						_server_socket_fd;
+		struct addrinfo				_hints;
+		struct addrinfo				*_servinfo;
+		std::map<const int, Client>	_clients;
+		std::map<const int, Client>	_tmpClients;
+		int							_server_socket_fd;
 	public:
 		Server();
 		~Server();
-		void	setHints();
-		int		fillServinfo(char *port);
-		int		launchServer();
-		int		manageServerLoop();
-		void	fillClient(std::string const &line);
-		void	addClientToTmp(int const &client_fd, char *message);
+		void		setHints();
+		int			fillServinfo(char *port);
+		int			launchServer();
+		int			manageServerLoop();
+		void		fillClient(std::string line, Client &client); // needs ameliorations.
+		void		addClientToTmp(int const &client_fd, char *message); // works 
+		std::string	confirmConnection();
 };
 
 #endif

@@ -76,14 +76,29 @@ int		Server::launchServer()
 	return (SUCCESS);
 }
 
-void	Server::fillClient(std::string const &line)
+void	Server::fillClient(std::string line, Client &client)
 {
-	// "NICK"
-		// setnick();
-	// USER
-		// setuser();
-	
-	// 
+	if (line.find("NICK") != std::string::npos)
+	{
+		line.erase(line.find("NICK"), 4);
+		client.setNickname(line);
+	}
+	else if (line.find("USER") != std::string::npos)
+	{
+		line.erase(line.find("USER "), 5);
+		// faire une subst qui return le name, set le username supprimer jusqau prochain espace recuperer les infos
+		// faire attentions aux valeurs de retour si un bail n'est pas envoye 
+		// faire attention aux * 
+		// encore une fois il faudra tester en changeant les parametres par defaut.
+		// resplitter la line ? plus efficace sans doute. 
+		line.erase(line.find(" "), line.length() - line.find(" ")); // ne pas erase car user enie aussi le full name
+		client.setUsername(line);
+		// limite a cause d'une succession d'espaces notamment dans le username.
+		// tester si on met plusieurs espaces a la suite.
+		// faire tests avec un username modifie
+	}
+	else
+		std::cout << "no NICk line = " << line << std::endl;
 }
 
 void	Server::addClientToTmp(int const &client_fd, char *message)
@@ -95,7 +110,7 @@ void	Server::addClientToTmp(int const &client_fd, char *message)
 	std::vector<std::string> lines;
 
 	int i = 0;
-	while ((pos = msg.find(delimiter)) != std::string::npos)
+	while ((pos = msg.find(delimiter)) != static_cast<int>(std::string::npos))
 	{
 		substr = msg.substr(0, pos);
 		// std::cout << "line = " << RED << substr << RESET << std::endl;
@@ -104,11 +119,27 @@ void	Server::addClientToTmp(int const &client_fd, char *message)
 		msg.erase(0, pos + delimiter.length());
 		i++;
 	}
+	// si le fd et deja dans le map on le add sinon on fill le client correspondant.
 	Client	client(client_fd);
-	for (int i = 0; i != lines.size(); i++)
+	for (unsigned long i = 0; i != lines.size(); i++)
 	{
-		std::cout  << RED << "line = " << RESET << lines[i] << std::endl; // on recupere bien chaque lignes
-		// fillClient(); 
+		std::map<const int, Client>::iterator it;
+		// std::cout  << RED << "line = " << RESET << lines[i] << std::endl; // on recupere bien chaque lignes
+		it = _tmpClients.find(client_fd);
+		if (it == _tmpClients.end())
+		{
+			fillClient(lines[i], client);
+			_tmpClients.insert(std::pair<int, Client>(client_fd, client));
+		}
+		else
+			fillClient(lines[i], it->second);
 	}
-	// _tmpClients.insert(std::pair<int, Client>(client_fd, client));
+}
+
+std::string	Server::confirmConnection(Client &client)
+{
+	std::string	message;
+	std::string return_value;
+	// return_value = clientValid();
+	message += "localhost" + return_value + client.getNickname() + "Welcme Message";
 }

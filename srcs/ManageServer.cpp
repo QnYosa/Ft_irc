@@ -128,6 +128,12 @@ int		Server::manageServerLoop()
 					else
 					{
 						addClientToTmp(it->fd, message);
+						for (std::map<const int, Client>::iterator iter = _tmpClients.begin(); iter != _tmpClients.end(); iter++)
+						{
+							std::cout << iter->first << " ";
+							iter->second.printClient();
+						}
+						// fonction is client ready to become user ? 
 						// print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
 						// parsing 
 						// send(it->fd, message, strlen(message) + 1, 0);
@@ -153,7 +159,7 @@ int		Server::manageServerLoop()
 				else
 				{
 					std::cout << "dans le else\n";
-					delClient(poll_fds, it);
+					delClient(poll_fds, it); // veiller a effacer le client du map
 				}
 			}
 			else
