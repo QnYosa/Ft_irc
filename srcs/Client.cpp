@@ -26,7 +26,6 @@ std::string		Client::getNickname()const
 	return (_nickname);
 }
 
-
 void	Client::setUsername(std::string const &username)
 {
 	_fullname = username;
@@ -37,8 +36,31 @@ std::string 	Client::getUsername()const
 	return (_fullname);
 }
 
+void	Client::setRealname(std::string const &realname)
+{
+	_realname = realname;
+}
+
+std::string	Client::getRealname()const
+{
+	return (_realname);
+}
+
 void			Client::printClient()const
 {
 	std::cout << RED << "nickname: " << _nickname << "\n" \
-			  << "Fullname: " << _fullname << RESET << "\n";
+			  << "Fullname: " << _fullname << "\n"
+			  << "Real name: " << _realname << RESET << "\n";
+
+}
+
+int				Client::is_valid()const
+{
+	if (_fullname.c_str() == NULL)
+		return (FAILURE);
+	if (_nickname.c_str() == NULL)
+		return (FAILURE);
+	if (_realname.c_str() == NULL)
+		return (FAILURE);
+	return (SUCCESS);
 }

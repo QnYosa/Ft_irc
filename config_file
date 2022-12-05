@@ -1,0 +1,28 @@
+servers = (
+  {
+    address = "localhost";
+    chatnet = "freenode";
+    port = "6667";
+    use_ssl = "no";
+    ssl_verify = "no";
+    autoconnect = "yes";
+  }
+);
+
+chatnets = {
+  Freenode = {
+    type = "IRC";
+    autosendcmd = "/msg nickserv identify yourname yourpass";
+  };
+};
+
+channels = (
+  { name = "#test-channel"; chatnet = "Freenode"; autojoin = "Yes"; }
+  { name = "#private-test-channel"; chatnet = "Freenode"; password = "yourpass"; autojoin = "Yes"; }
+);
+
+settings = {
+  core = { real_name = "real name"; user_name = "user name"; nick = "yourusername"; };
+  "fe-text" = { actlist_sort = "refnum"; term_force_colors = "yes"; scrollback_time = "7day "; };
+  "fe-common/core" = { theme = "default"; };
+};

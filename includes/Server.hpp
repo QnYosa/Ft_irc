@@ -21,7 +21,7 @@ class Server
 		int			manageServerLoop();
 		void		fillClient(std::string line, Client &client); // needs ameliorations.
 		void		addClientToTmp(int const &client_fd, char *message); // works 
-		std::string	confirmConnection();
+		std::string	confirmConnection(Client const &client);
 };
 
 #endif

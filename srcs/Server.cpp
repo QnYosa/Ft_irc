@@ -78,6 +78,7 @@ int		Server::launchServer()
 
 void	Server::fillClient(std::string line, Client &client)
 {
+	std::cout << "line received = " << line << std::endl;
 	if (line.find("NICK") != std::string::npos)
 	{
 		line.erase(line.find("NICK"), 4);
@@ -85,17 +86,18 @@ void	Server::fillClient(std::string line, Client &client)
 	}
 	else if (line.find("USER") != std::string::npos)
 	{
-		line.erase(line.find("USER "), 5);
 		// faire une subst qui return le name, set le username supprimer jusqau prochain espace recuperer les infos
 		// faire attentions aux valeurs de retour si un bail n'est pas envoye 
 		// faire attention aux * 
 		// encore une fois il faudra tester en changeant les parametres par defaut.
 		// resplitter la line ? plus efficace sans doute. 
-		line.erase(line.find(" "), line.length() - line.find(" ")); // ne pas erase car user enie aussi le full name
-		client.setUsername(line);
+		line.erase(line.find("USER "), 5);
+		client.setUsername(line.substr(line.find(" "), line.find(" ") + 1));
+		client.setRealname(line.substr(line.find(":") + 1, line.length() - line.find(":") + 1));
 		// limite a cause d'une succession d'espaces notamment dans le username.
 		// tester si on met plusieurs espaces a la suite.
 		// faire tests avec un username modifie
+		// :realname
 	}
 	else
 		std::cout << "no NICk line = " << line << std::endl;
@@ -134,10 +136,13 @@ void	Server::addClientToTmp(int const &client_fd, char *message)
 		else
 			fillClient(lines[i], it->second);
 	}
+	// return (client ready());
 }
 
-std::string	Server::confirmConnection(Client &client)
+std::string	Server::confirmConnection(Client const &client)
 {
+	if (client.is_valid() == FAILURE)
+		return ("461");
 	std::string	message;
 	std::string return_value;
 	// return_value = clientValid();
