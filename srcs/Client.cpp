@@ -46,6 +46,11 @@ std::string	Client::getRealname()const
 	return (_realname);
 }
 
+int			Client::getClientFd()const
+{
+	return (_client_fd);
+}
+
 void			Client::printClient()const
 {
 	std::cout << RED << "nickname: " << _nickname << "\n" \
@@ -56,11 +61,11 @@ void			Client::printClient()const
 
 int				Client::is_valid()const
 {
-	if (_fullname.c_str() == NULL)
+	if (_fullname.empty())
 		return (FAILURE);
-	if (_nickname.c_str() == NULL)
+	if (_nickname.empty())
 		return (FAILURE);
-	if (_realname.c_str() == NULL)
+	if (_realname.empty())
 		return (FAILURE);
 	return (SUCCESS);
 }

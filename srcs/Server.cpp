@@ -127,6 +127,7 @@ void	Server::addClientToTmp(int const &client_fd, char *message)
 	{
 		std::map<const int, Client>::iterator it;
 		// std::cout  << RED << "line = " << RESET << lines[i] << std::endl; // on recupere bien chaque lignes
+		std::cout << "client fd = " << client_fd << std::endl;
 		it = _tmpClients.find(client_fd);
 		if (it == _tmpClients.end())
 		{
@@ -137,14 +138,28 @@ void	Server::addClientToTmp(int const &client_fd, char *message)
 			fillClient(lines[i], it->second);
 	}
 	// return (client ready());
+	std::map<const int, Client>::iterator it1;
+	it1 = _tmpClients.find(client_fd);
+	if (this->confirmConnection(it1->second) > SUCCESS)
+	{
+		close(client_fd);
+		_tmpClients.erase(it1);
+	}
 }
 
-std::string	Server::confirmConnection(Client const &client)
+int	Server::confirmConnection(Client const &client)
 {
 	if (client.is_valid() == FAILURE)
-		return ("461");
+		return (461);
+	std::map<const int, Client>::iterator it;
+	for (it = _tmpClients.begin(); it != _tmpClients.end(); it++)
+	{
+		if (it->second.getNickname() == client.getNickname() && it->first != client.getClientFd())
+			return (1);
+	}
 	std::string	message;
 	std::string return_value;
 	// return_value = clientValid();
 	message += "localhost" + return_value + client.getNickname() + "Welcme Message";
+	return (SUCCESS);
 }
