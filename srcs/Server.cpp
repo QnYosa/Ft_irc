@@ -38,6 +38,16 @@ int		Server::fillServinfo(char *port)
 	return (SUCCESS);
 }
 
+
+void	Server::printClients()
+{
+	std::map<const int, Client>::iterator it;
+	for (it = _tmpClients.begin(); it != _tmpClients.end(); it++)
+	{
+		it->second.printClient();
+	}
+}
+
 /**
  * @brief This function follows step by step the required function calls to launch the server:
  * 
@@ -78,7 +88,7 @@ int		Server::launchServer()
 
 void	Server::fillClient(std::string line, Client &client)
 {
-	std::cout << "line received = " << line << std::endl;
+	// std::cout << "line received = " << line << std::endl;
 	if (line.find("NICK") != std::string::npos)
 	{
 		line.erase(line.find("NICK"), 4);
@@ -99,11 +109,9 @@ void	Server::fillClient(std::string line, Client &client)
 		// faire tests avec un username modifie
 		// :realname
 	}
-	else
-		std::cout << "no NICk line = " << line << std::endl;
 }
 
-void	Server::addClientToTmp(int const &client_fd, char *message)
+int	Server::addClientToTmp(int const &client_fd, char *message)
 {
 	std::string msg = message;
 	std::string	delimiter = "\n";
@@ -137,14 +145,16 @@ void	Server::addClientToTmp(int const &client_fd, char *message)
 		else
 			fillClient(lines[i], it->second);
 	}
-	// return (client ready());
+
 	std::map<const int, Client>::iterator it1;
 	it1 = _tmpClients.find(client_fd);
-	if (this->confirmConnection(it1->second) > SUCCESS)
+	if (this->confirmConnection(it1->second) == FAILURE)
 	{
-		close(client_fd);
+		// close(client_fd);
 		_tmpClients.erase(it1);
+		return (FAILURE);
 	}
+	return (SUCCESS);
 }
 
 int	Server::confirmConnection(Client const &client)
@@ -155,11 +165,9 @@ int	Server::confirmConnection(Client const &client)
 	for (it = _tmpClients.begin(); it != _tmpClients.end(); it++)
 	{
 		if (it->second.getNickname() == client.getNickname() && it->first != client.getClientFd())
-			return (1);
+		{
+			return (FAILURE);
+		}
 	}
-	std::string	message;
-	std::string return_value;
-	// return_value = clientValid();
-	message += "localhost" + return_value + client.getNickname() + "Welcme Message";
 	return (SUCCESS);
 }

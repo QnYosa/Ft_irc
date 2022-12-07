@@ -17,10 +17,11 @@ class Server
 		~Server();
 		void		setHints();
 		int			fillServinfo(char *port);
+		void		printClients();
 		int			launchServer();
 		int			manageServerLoop();
 		void		fillClient(std::string line, Client &client); // needs ameliorations.
-		void		addClientToTmp(int const &client_fd, char *message); // works 
+		int			addClientToTmp(int const &client_fd, char *message); // works 
 		int			confirmConnection(Client const &client);
 };
 
