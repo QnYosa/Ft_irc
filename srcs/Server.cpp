@@ -85,19 +85,15 @@ int		Server::launchServer()
 	return (SUCCESS);
 }
 
-int	Server::addClientToTmp(int const &client_fd, char *message)
+int		Server::addClientToTmp(int const &client_fd, char *message)
 {
 	std::vector<std::string> lines;
-	this->split(lines, message);
-
-	// return si nick deja present
-	// si le fd et deja dans le map on le add sinon on fill le client correspondant.
 	Client	client(client_fd);
+
+	this->split(lines, message);
 	for (unsigned long i = 0; i != lines.size(); i++)
 	{
 		std::map<const int, Client>::iterator it;
-		// std::cout  << RED << "line = " << RESET << lines[i] << std::endl; // on recupere bien chaque lignes
-		std::cout << "client fd = " << client_fd << std::endl;
 		it = _tmpClients.find(client_fd);
 		if (it == _tmpClients.end())
 		{

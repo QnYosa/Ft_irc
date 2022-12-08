@@ -5,6 +5,7 @@
 
 void	Server::fillClient(std::string line, Client &client)
 {
+	std::cout << line << std::endl;
 	if (line.find("NICK") != std::string::npos)
 	{
 		line.erase(line.find("NICK"), 4);
@@ -32,7 +33,7 @@ void	Server::split(std::vector<std::string> &lines, char *message)
 	}
 }
 
-int	Server::confirmConnection(Client const &client)
+int		Server::confirmConnection(Client const &client)
 {
 	if (client.is_valid() == FAILURE)
 		return (461);

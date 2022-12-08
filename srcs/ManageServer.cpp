@@ -130,7 +130,6 @@ int		Server::manageServerLoop()
 						std::cout << CYAN << "it->fd = " << it->fd << RESET << std::endl;
 						if (addClientToTmp(it->fd, message) == FAILURE) // error car on ne supprime et on ne close pas le fd
 						{
-							// close(it->fd);		// delClient(poll_fds , it); // bug ?
 							insert = 0;
 						}
 						// fonction is client ready to become user ? 
@@ -170,9 +169,10 @@ int		Server::manageServerLoop()
 			// les lignes ci-dessus indiquent qu'il manque un close. 
 		}
 		if (insert == 1)
+		{
 			poll_fds.insert(poll_fds.end(), new_pollfds.begin(), new_pollfds.end()); // Add the range of NEW_pollfds in poll_fds (helps recalculating poll_fds.end() in the for loop)
-		else
-			this->printClients();
+			// this->printClients();
+		}
 	}
 	return (SUCCESS);
 }
