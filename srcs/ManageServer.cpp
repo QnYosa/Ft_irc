@@ -130,7 +130,7 @@ int		Server::manageServerLoop()
 						std::cout << CYAN << "it->fd = " << it->fd << RESET << std::endl;
 						if (addClientToTmp(it->fd, message) == FAILURE) // error car on ne supprime et on ne close pas le fd
 						{
-							close(it->fd);		// delClient(poll_fds , it); // bug ?
+							// close(it->fd);		// delClient(poll_fds , it); // bug ?
 							insert = 0;
 						}
 						// fonction is client ready to become user ? 

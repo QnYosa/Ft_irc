@@ -20,9 +20,13 @@ class Server
 		void		printClients();
 		int			launchServer();
 		int			manageServerLoop();
-		void		fillClient(std::string line, Client &client); // needs ameliorations.
 		int			addClientToTmp(int const &client_fd, char *message); // works 
+
+		/*PARSE_HPP*/
+		void		fillClient(std::string line, Client &client); // needs ameliorations.
+		void		split(std::vector<std::string> &lines, char *message);
 		int			confirmConnection(Client const &client);
+
 };
 
 #endif
