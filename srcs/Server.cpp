@@ -38,6 +38,15 @@ int		Server::fillServinfo(char *port)
 	return (SUCCESS);
 }
 
+void	Server::printClients()
+{
+	std::map<const int, Client>::iterator it;
+	for (it = _tmpClients.begin(); it != _tmpClients.end(); it++)
+	{
+		it->second.printClient();
+	}
+}
+
 /**
  * @brief This function follows step by step the required function calls to launch the server:
  * 
@@ -76,52 +85,12 @@ int		Server::launchServer()
 	return (SUCCESS);
 }
 
-void	Server::fillClient(std::string line, Client &client)
+int		Server::addClientToTmp(int const &client_fd, char *message)
 {
-	if (line.find("NICK") != std::string::npos)
-	{
-		line.erase(line.find("NICK"), 4);
-		client.setNickname(line);
-	}
-	else if (line.find("USER") != std::string::npos)
-	{
-		// faire une subst qui return le name, set le username supprimer jusqau prochain espace recuperer les infos
-		// faire attentions aux valeurs de retour si un bail n'est pas envoye 
-		// faire attention aux * 
-		// encore une fois il faudra tester en changeant les parametres par defaut.
-		// resplitter la line ? plus efficace sans doute. 
-		line.erase(line.find("USER "), 5);
-		client.setUsername(line.substr(line.find(" "), line.find(" ") + 1));
-		client.setRealname(line.substr(line.find(":") + 1, line.length() - line.find(":") + 1));
-		// limite a cause d'une succession d'espaces notamment dans le username.
-		// tester si on met plusieurs espaces a la suite.
-		// faire tests avec un username modifie
-		// :realname
-	}
-	// else
-	// 	std::cout << "no NICk line = " << line << std::endl;
-}
-
-int	Server::addClientToTmp(int const &client_fd, char *message)
-{
-	std::string msg = message;
-	std::string	delimiter = "\n";
-	int pos = 0;
-	std::string	substr;
 	std::vector<std::string> lines;
-
-	int i = 0;
-	while ((pos = msg.find(delimiter)) != static_cast<int>(std::string::npos))
-	{
-		substr = msg.substr(0, pos);
-		// std::cout << "line = " << RED << substr << RESET << std::endl;
-		std::cout << "i = " << RED << i << RESET << std::endl;
-		lines.push_back(substr);
-		msg.erase(0, pos + delimiter.length());
-		i++;
-	}
-	// si le fd et deja dans le map on le add sinon on fill le client correspondant.
 	Client	client(client_fd);
+
+	this->split(lines, message);
 	for (unsigned long i = 0; i != lines.size(); i++)
 	{
 		std::map<const int, Client>::iterator it;
@@ -136,36 +105,15 @@ int	Server::addClientToTmp(int const &client_fd, char *message)
 			fillClient(lines[i], it->second);
 		}
 	}
-	// return (client ready());
-	return (this->confirmConnection(_tmpClients.find(client_fd)->second, client_fd));
-}
 
-int	Server::confirmConnection(Client const &client, const int client_fd)
-{
-	if (client.is_valid() == FAILURE)
-		return (461); //  ERR_NEEDMOREPARAMS (461)
-	std::map<const int, Client>::iterator it;
-	for (it = _tmpClients.begin(); it != _tmpClients.end(); it++)
+	std::map<const int, Client>::iterator it1;
+	it1 = _tmpClients.find(client_fd);
+	if (this->confirmConnection(it1->second) == FAILURE)
 	{
-		if (it->first != client_fd && it->second.getNickname() == client.getNickname())
-		{
-			close(client_fd);
-			_tmpClients.erase(it);
-			return (433); // 433 ERR_NICKNAMEINUSE
-		}
+		// close(client_fd);
+		_tmpClients.erase(it1);
+		return (FAILURE);
 	}
-	std::string	message;
-	std::string wlcm = RPL_WELCOME;
-	std::string wlcm_msg = WELCOME_MSG;
-	std::string spc = " ";
-	// return_value = clientValid();
-	message.append("localhost");
-	message.append(spc);
-	message.append(wlcm);
-	message.append(client.getNickname());
-	message.append(" ");
-	// message.append("Welcome on our very first Irc Server");
-	// std::cout << "message 1 = " << message << std::endl;
-	// std::cout << "message 2 = " << message << std::endl;
 	return (SUCCESS);
 }
+

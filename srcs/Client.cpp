@@ -46,6 +46,11 @@ std::string	Client::getRealname()const
 	return (_realname);
 }
 
+int			Client::getClientFd()const
+{
+	return (_client_fd);
+}
+
 void			Client::printClient()const
 {
 	std::cout << RED << "nickname: " << _nickname << "\n" \

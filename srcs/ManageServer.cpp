@@ -67,7 +67,6 @@ int		Server::manageServerLoop()
 {
 	std::vector<pollfd>	poll_fds;
 	pollfd				server_poll_fd;
-
 	server_poll_fd.fd = _server_socket_fd;
 	server_poll_fd.events = POLLIN;
 
@@ -75,6 +74,7 @@ int		Server::manageServerLoop()
 	std::string message_to_client;
 	while (1)
 	{
+		int					insert = 1;
 		std::vector<pollfd> new_pollfds; // tmp struct hosting potential newly-created fds
 
 		if (poll((pollfd *)&poll_fds[0], (unsigned int)poll_fds.size(), -1) <= SUCCESS) // -1 == no timeout
@@ -82,7 +82,7 @@ int		Server::manageServerLoop()
 			std::cerr << RED << "Poll error" << RESET << std::endl;;
 			return (FAILURE);
 		}
-
+		// checker les clients ici plutot et les dels s'ils sont invalides
 		std::vector<pollfd>::iterator	it = poll_fds.begin();
 		while (it != poll_fds.end())
 		{
@@ -127,19 +127,13 @@ int		Server::manageServerLoop()
 					}
 					else
 					{
-						int ret = addClientToTmp(it->fd, message);
-						std::cout << RED << "ret = " << ret << RESET << std::endl;
-						// std::cout << message_to_client << std::endl;
-						// send(it->fd,message_to_client.c_str(), message_to_client.length(), 0);
-						// std::cout << message_to_client << std::endl;
-						for (std::map<const int, Client>::iterator iter = _tmpClients.begin(); iter != _tmpClients.end(); iter++)
+						std::cout << CYAN << "it->fd = " << it->fd << RESET << std::endl;
+						if (addClientToTmp(it->fd, message) == FAILURE) // error car on ne supprime et on ne close pas le fd
 						{
-							std::cout << iter->first << " ";
-							iter->second.printClient();
+							insert = 0;
 						}
 						// fonction is client ready to become user ? 
-						print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
-						// parsing 
+						// print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
 						// send(it->fd, message, strlen(message) + 1, 0);
 						// print("Send : ", it->fd, message);
 						it++;
@@ -173,8 +167,13 @@ int		Server::manageServerLoop()
 			// std::vector<pollfd>::iterator	end1 = poll_fds.end();
 			// for (it1 = poll_fds.begin(); it1 != end1; it1++)
 			// 	std::cout << YELLOW << "Fd = " << it1->fd << RESET << std::endl;
+			// les lignes ci-dessus indiquent qu'il manque un close. 
 		}
-		poll_fds.insert(poll_fds.end(), new_pollfds.begin(), new_pollfds.end()); // Add the range of NEW_pollfds in poll_fds (helps recalculating poll_fds.end() in the for loop)
+		if (insert == 1)
+		{
+			poll_fds.insert(poll_fds.end(), new_pollfds.begin(), new_pollfds.end()); // Add the range of NEW_pollfds in poll_fds (helps recalculating poll_fds.end() in the for loop)
+			// this->printClients();
+		}
 	}
 	return (SUCCESS);
 }

@@ -53,6 +53,7 @@
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
+<<<<<<< HEAD
 		"__bit_reference": "cpp",
 		"__bits": "cpp",
 		"__config": "cpp",
@@ -75,5 +76,8 @@
 		"mutex": "cpp",
 		"ratio": "cpp",
 		"variant": "cpp"
+=======
+		"fstream": "cpp"
+>>>>>>> f64744bef9c76122e70225f5e9d67d564e706f6b
 	}
 }

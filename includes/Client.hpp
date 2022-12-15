@@ -21,6 +21,7 @@ class Client
 		std::string	getUsername()const;
 		void		setRealname(std::string const &realname);
 		std::string	getRealname()const;
+		int			getClientFd()const;
 		void		printClient()const;
 		int			is_valid()const;
 };
