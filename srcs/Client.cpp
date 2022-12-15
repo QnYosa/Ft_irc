@@ -1,11 +1,6 @@
 #include "Client.hpp"
 
-// Client::Client(pollfd client_poll_fd) : _client_poll_fd(client_poll_fd)
-// {
-// 	std::cout << YELLOW << "Client constructor" << RESET << std::endl;
-// }
-
-Client::Client(int client_fd) : _client_fd(client_fd), _ready(0)
+Client::Client(int client_fd) : _client_fd(client_fd)
 {
 	std::cout << YELLOW << "Client constructor" << RESET << std::endl;
 }
@@ -13,6 +8,11 @@ Client::Client(int client_fd) : _client_fd(client_fd), _ready(0)
 Client::~Client()
 {
 	std::cout << YELLOW << "Client destructor" << RESET << std::endl;
+}
+
+int	Client::getClientFd()const
+{
+	return (_client_fd);
 }
 
 void	Client::setNickname(std::string const &nickname)
@@ -46,20 +46,18 @@ std::string	Client::getRealname()const
 	return (_realname);
 }
 
-int			Client::getClientFd()const
+void	Client::printClient()const
 {
-	return (_client_fd);
-}
-
-void			Client::printClient()const
-{
-	std::cout << RED << "nickname: " << _nickname << "\n" \
-			  << "Fullname: " << _fullname << "\n"
-			  << "Real name: " << _realname << RESET << "\n";
+	std::cout << "Print client" << std::endl;
+	std::cout << YELLOW << "fd: " << _client_fd << "\n" \
+			<< "nickname: " << _nickname << "\n" \
+			<< "Fullname: " << _fullname << "\n"
+			<< "Real name: " << _realname << RESET << "\n";
 
 }
 
-int				Client::is_valid()const
+// TODO : a compléter
+int	Client::is_valid() const
 {
 	if (_fullname.empty())
 		return (FAILURE);

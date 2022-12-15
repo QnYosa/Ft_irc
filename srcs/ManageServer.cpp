@@ -8,15 +8,6 @@ static int	acceptSocket(int listenSocket)
 	return (accept(listenSocket, (sockaddr *)&client, &addr_size));
 }
 
-static void	addClient(int client_socket, std::vector<pollfd> &poll_fds)
-{
-	pollfd	client_pollfd;
-	client_pollfd.fd = client_socket;
-	client_pollfd.events = POLLIN | POLLOUT;
-	poll_fds.push_back(client_pollfd);
-	std::cout << PURPLE << "CLIENT ADDED SUCCESSFULLY" << RESET << std::endl;
-}
-
 static void	tooManyClients(int client_socket)
 {
 	std::cout << RED << ERR_FULL_SERV << RESET << std::endl;
@@ -44,23 +35,6 @@ static void	print(std::string type, int client_socket, char *message)
 			  << inet_ntoa(client.sin_addr) << " " \
 			  << ntohs(client.sin_port) << std::endl \
 			  << BLUE << (message == NULL ? "\n" : message) << RESET << std::endl;
-}
-
-static void	delClient(std::vector<pollfd> &poll_fds, std::vector<pollfd>::iterator &it)
-{
-	std::cout << "je suis dans le del\n";
-	print("Deconnection of client : ", it->fd, NULL);
-	std::vector<pollfd>::iterator		iterator;
-	for (iterator = poll_fds.begin(); iterator != poll_fds.end(); iterator++)
-	{
-		if (iterator->fd == it->fd)
-		{
-			close(it->fd);
-			poll_fds.erase(iterator);
-			break;
-		}
-	}
-	std::cout << CYAN << "Client deleted \nTotal Client is now: " << (unsigned int)(poll_fds.size() - 1) << RESET << std::endl;
 }
 
 int		Server::manageServerLoop()
@@ -97,15 +71,10 @@ int		Server::manageServerLoop()
 						continue;
 					}
 					if (poll_fds.size() - 1 < MAX_CLIENT_NB)
-					{
 						addClient(client_sock, new_pollfds); // Beware, here we push the new client_socket in NEW_pollfds
-						it++;
-					}
 					else
-					{
 						tooManyClients(client_sock);
-						it++;
-					}	
+					it++;
 				}
 				else // => If the dedicated fd for the Client/Server connection already exists
 				{
@@ -127,25 +96,12 @@ int		Server::manageServerLoop()
 					}
 					else
 					{
-						std::cout << CYAN << "it->fd = " << it->fd << RESET << std::endl;
-						if (addClientToTmp(it->fd, message) == FAILURE) // error car on ne supprime et on ne close pas le fd
-						{
-							insert = 0;
-						}
-						// fonction is client ready to become user ? 
-						// print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
-						// send(it->fd, message, strlen(message) + 1, 0);
+						print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
+						parseMessage(it->fd, message);
 						// print("Send : ", it->fd, message);
 						it++;
 					}
 				}
-			}
-			else if (it->revents & POLLOUT) // => If the event that occured is a POLLOUT (aka "I can send() data to this socket without blocking")
-			{
-				// std::cout << message_to_client.c_str() << std::endl;
-				// send(it->fd,message_to_client.c_str(), message_to_client.length(), 0);
-				// TODO flush buffer in client
-				it++;
 			}
 			else if (it->revents & POLLERR) // voir si il faut it++ ?
 			{
@@ -163,16 +119,18 @@ int		Server::manageServerLoop()
 			}
 			else
 				it++;
-			// std::vector<pollfd>::iterator	it1;
-			// std::vector<pollfd>::iterator	end1 = poll_fds.end();
-			// for (it1 = poll_fds.begin(); it1 != end1; it1++)
-			// 	std::cout << YELLOW << "Fd = " << it1->fd << RESET << std::endl;
-			// les lignes ci-dessus indiquent qu'il manque un close. 
 		}
-		if (insert == 1)
+		poll_fds.insert(poll_fds.end(), new_pollfds.begin(), new_pollfds.end()); // Add the range of NEW_pollfds in poll_fds (helps recalculating poll_fds.end() in the for loop)
+		std::cout << "j'ai insert\n" << std::endl;
+		
+		// print list of our client
+		std::cout << "Map size : " << _clients.size() << std::endl;
+		std::cout << "print list of our client" << std::endl;
+		std::map<const int, Client>::iterator it_map;
+		for (it_map = _clients.begin(); it_map != _clients.end(); it_map++)
 		{
-			poll_fds.insert(poll_fds.end(), new_pollfds.begin(), new_pollfds.end()); // Add the range of NEW_pollfds in poll_fds (helps recalculating poll_fds.end() in the for loop)
-			// this->printClients();
+			std::cout << "Key : " << it_map->first << std::endl;
+			it_map->second.printClient();
 		}
 	}
 	return (SUCCESS);

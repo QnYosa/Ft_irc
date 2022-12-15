@@ -53,31 +53,6 @@
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
-<<<<<<< HEAD
-		"__bit_reference": "cpp",
-		"__bits": "cpp",
-		"__config": "cpp",
-		"__debug": "cpp",
-		"__errc": "cpp",
-		"__hash_table": "cpp",
-		"__locale": "cpp",
-		"__mutex_base": "cpp",
-		"__node_handle": "cpp",
-		"__nullptr": "cpp",
-		"__split_buffer": "cpp",
-		"__string": "cpp",
-		"__threading_support": "cpp",
-		"__tree": "cpp",
-		"__tuple": "cpp",
-		"chrono": "cpp",
-		"ctime": "cpp",
-		"ios": "cpp",
-		"locale": "cpp",
-		"mutex": "cpp",
-		"ratio": "cpp",
-		"variant": "cpp"
-=======
 		"fstream": "cpp"
->>>>>>> f64744bef9c76122e70225f5e9d67d564e706f6b
 	}
 }
