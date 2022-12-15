@@ -41,14 +41,14 @@ int		Server::manageServerLoop()
 {
 	std::vector<pollfd>	poll_fds;
 	pollfd				server_poll_fd;
+
 	server_poll_fd.fd = _server_socket_fd;
 	server_poll_fd.events = POLLIN;
 
 	poll_fds.push_back(server_poll_fd);
-	std::string message_to_client;
+
 	while (1)
 	{
-		int					insert = 1;
 		std::vector<pollfd> new_pollfds; // tmp struct hosting potential newly-created fds
 
 		if (poll((pollfd *)&poll_fds[0], (unsigned int)poll_fds.size(), -1) <= SUCCESS) // -1 == no timeout
@@ -56,7 +56,7 @@ int		Server::manageServerLoop()
 			std::cerr << RED << "Poll error" << RESET << std::endl;;
 			return (FAILURE);
 		}
-		// checker les clients ici plutot et les dels s'ils sont invalides
+
 		std::vector<pollfd>::iterator	it = poll_fds.begin();
 		while (it != poll_fds.end())
 		{
@@ -73,10 +73,8 @@ int		Server::manageServerLoop()
 					if (poll_fds.size() - 1 < MAX_CLIENT_NB)
 						addClient(client_sock, new_pollfds); // Beware, here we push the new client_socket in NEW_pollfds
 					else
-					{
 						tooManyClients(client_sock);
-						it++;
-					}	
+					it++;
 				}
 				else // => If the dedicated fd for the Client/Server connection already exists
 				{
@@ -105,12 +103,6 @@ int		Server::manageServerLoop()
 					}
 				}
 			}
-			else if (it->revents & POLLOUT) // => If the event that occured is a POLLOUT (aka "I can send() data to this socket without blocking")
-			{
-				// send(it->fd, ":127.0.0.1 001 tmanolis :Welcome tmanolis!tmanolis@127.0.0.1\r\n", 62, 0);
-				// TODO flush buffer in client
-				it++;
-			}
 			else if (it->revents & POLLERR) // voir si il faut it++ ?
 			{
 				std::cout << "je suis dans le POLLERR\n";
@@ -122,7 +114,7 @@ int		Server::manageServerLoop()
 				else
 				{
 					std::cout << "dans le else\n";
-					delClient(poll_fds, it); // veiller a effacer le client du map
+					delClient(poll_fds, it);
 				}
 			}
 			else

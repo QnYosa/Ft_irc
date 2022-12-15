@@ -48,6 +48,7 @@ std::string	Client::getRealname()const
 
 void	Client::printClient()const
 {
+	std::cout << "Print client" << std::endl;
 	std::cout << YELLOW << "fd: " << _client_fd << "\n" \
 			<< "nickname: " << _nickname << "\n" \
 			<< "Fullname: " << _fullname << "\n"
@@ -55,7 +56,8 @@ void	Client::printClient()const
 
 }
 
-int	Client::is_valid()const
+// TODO : a compléter
+int	Client::is_valid() const
 {
 	if (_fullname.empty())
 		return (FAILURE);

@@ -28,6 +28,12 @@ void	Server::setHints()
  * @param port Value given by the user (e.g. "6667")
  * @return int Returns SUCCESS or FAILURE whether getaddrinfo works or not
  */
+
+std::string	Server::getMdp() 
+{ 
+	return (_mdp);
+}
+
 int		Server::fillServinfo(char *port)
 {
 	if (getaddrinfo(NULL, port, &_hints, &_servinfo) < 0)
