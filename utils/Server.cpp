@@ -169,3 +169,25 @@ int	Server::confirmConnection(Client const &client, const int client_fd)
 	// std::cout << "message 2 = " << message << std::endl;
 	return (SUCCESS);
 }
+
+std::map<std::string, Channel>	Server::getChannels()const
+{
+	return (_channels);
+}
+
+void	Server::addChannel(std::string const &channelName)
+{
+	Channel	channel(channelName);
+	_channels.insert(std::pair<std::string, Channel>(channelName, channel));
+	std::cout << RED << "Channel added: " << channelName << RESET << std::endl;
+}
+
+void	Server::addClientToChannel(std::string &channelName, Client &client)
+{
+	std::map<std::string, Channel>::iterator it;
+	it = _channels.find(channelName);
+	if (it != _channels.end())
+	{
+		it->second.addClientToChannel(client);
+	}
+}

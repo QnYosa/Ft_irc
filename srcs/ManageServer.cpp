@@ -72,7 +72,7 @@ int		Server::manageServerLoop()
 	server_poll_fd.events = POLLIN;
 
 	poll_fds.push_back(server_poll_fd);
-
+	std::string message_to_client;
 	while (1)
 	{
 		std::vector<pollfd> new_pollfds; // tmp struct hosting potential newly-created fds
@@ -127,14 +127,18 @@ int		Server::manageServerLoop()
 					}
 					else
 					{
-						addClientToTmp(it->fd, message);
+						int ret = addClientToTmp(it->fd, message);
+						std::cout << RED << "ret = " << ret << RESET << std::endl;
+						// std::cout << message_to_client << std::endl;
+						// send(it->fd,message_to_client.c_str(), message_to_client.length(), 0);
+						// std::cout << message_to_client << std::endl;
 						for (std::map<const int, Client>::iterator iter = _tmpClients.begin(); iter != _tmpClients.end(); iter++)
 						{
 							std::cout << iter->first << " ";
 							iter->second.printClient();
 						}
 						// fonction is client ready to become user ? 
-						// print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
+						print("Recv : ", it->fd, message); // si affichage incoherent regarder ici 
 						// parsing 
 						// send(it->fd, message, strlen(message) + 1, 0);
 						// print("Send : ", it->fd, message);
@@ -144,7 +148,8 @@ int		Server::manageServerLoop()
 			}
 			else if (it->revents & POLLOUT) // => If the event that occured is a POLLOUT (aka "I can send() data to this socket without blocking")
 			{
-				// send(it->fd, ":127.0.0.1 001 tmanolis :Welcome tmanolis!tmanolis@127.0.0.1\r\n", 62, 0);
+				// std::cout << message_to_client.c_str() << std::endl;
+				// send(it->fd,message_to_client.c_str(), message_to_client.length(), 0);
 				// TODO flush buffer in client
 				it++;
 			}
