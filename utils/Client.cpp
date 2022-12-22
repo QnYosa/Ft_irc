@@ -5,14 +5,14 @@
 // 	std::cout << YELLOW << "Client constructor" << RESET << std::endl;
 // }
 
-Client::Client(int client_fd) : _client_fd(client_fd), _ready(0)
+Client::Client(int client_fd) : _client_fd(client_fd), _ready(0), _operator(0)
 {
-	std::cout << YELLOW << "Client constructor" << RESET << std::endl;
+	// std::cout << YELLOW << "Client constructor" << RESET << std::endl;
 }
 
 Client::~Client()
 {
-	std::cout << YELLOW << "Client destructor" << RESET << std::endl;
+	// std::cout << YELLOW << "Client destructor" << RESET << std::endl;
 }
 
 void	Client::setNickname(std::string const &nickname)
@@ -21,7 +21,7 @@ void	Client::setNickname(std::string const &nickname)
 	// limiter la size comme sur un irc classique
 }
 
-std::string		Client::getNickname()const
+std::string	&	Client::getNickname()
 {
 	return (_nickname);
 }
@@ -63,4 +63,14 @@ int				Client::is_valid()const
 	if (_realname.empty())
 		return (FAILURE);
 	return (SUCCESS);
+}
+
+void			Client::setOperator(int n)
+{
+	_operator = n;
+}
+
+int				Client::getOperator()const
+{
+	return (_operator);
 }

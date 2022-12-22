@@ -140,7 +140,7 @@ int	Server::addClientToTmp(int const &client_fd, char *message)
 	return (this->confirmConnection(_tmpClients.find(client_fd)->second, client_fd));
 }
 
-int	Server::confirmConnection(Client const &client, const int client_fd)
+int	Server::confirmConnection(Client &client, const int client_fd)
 {
 	if (client.is_valid() == FAILURE)
 		return (461); //  ERR_NEEDMOREPARAMS (461)
@@ -175,19 +175,5 @@ std::map<std::string, Channel>	Server::getChannels()const
 	return (_channels);
 }
 
-void	Server::addChannel(std::string const &channelName)
-{
-	Channel	channel(channelName);
-	_channels.insert(std::pair<std::string, Channel>(channelName, channel));
-	std::cout << RED << "Channel added: " << channelName << RESET << std::endl;
-}
 
-void	Server::addClientToChannel(std::string &channelName, Client &client)
-{
-	std::map<std::string, Channel>::iterator it;
-	it = _channels.find(channelName);
-	if (it != _channels.end())
-	{
-		it->second.addClientToChannel(client);
-	}
-}
+

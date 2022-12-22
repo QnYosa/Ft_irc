@@ -25,11 +25,16 @@ class Server
 		int			manageServerLoop();
 		void		fillClient(std::string line, Client &client); // needs ameliorations.
 		int			addClientToTmp(int const &client_fd, char *message); // works 
-		int			confirmConnection(Client const &client, const int client_fd);
+		int			confirmConnection(Client &client, const int client_fd);
 		std::map<std::string, Channel>	getChannels()const;
 		void		addChannel(std::string const &channelName);
 		void		addClientToChannel(std::string &channelName, Client &client);
-
+	/* Server Commands */
+		void		join(Client &client, std::string &channelName);
+		void		quit(std::string &channelName, std::string &clientName);
+		void		kick(Client &client, std::string &channelName, std::string &clientName);
+	/*Display*/
+		void		printChannel(std::string &channelName);
 };
 
 #endif

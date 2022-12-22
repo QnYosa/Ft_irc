@@ -1,20 +1,6 @@
 #include "Irc.hpp"
 #include "Server.hpp"
 
-void	parsing(std::string action)
-{
-	for (int i = 0; i < action.length(); i++)
-		action[i] = tolower(action[i]);
-	if (action == "join")
-	{
-		std::cout << "JOIN\n";
-	}
-	else
-		std::cout << "action not found\n";
-}
-
-
-
 int main (void)
 {
 	Server s;
@@ -22,7 +8,8 @@ int main (void)
 	// Channel channel(channel_name);
 	// channel.getClientList().insert(channel_name, std::vector <Client>);
 	// s._channels.insert(std::pair<std::string, Channel>(channel_name, channel));
-	// Client client(4);
+	Client client(4);
+	client.setNickname("Bassim");
 	// parsing("join");
 	s.addChannel("Ligue 1");
 	s.addChannel("ligue 2");
@@ -34,9 +21,24 @@ int main (void)
 	std::cout << "begin  = " << it->second.getName() << std::endl;
 	it = s.getChannels().end();
 	std::cout << "end  = " << it->second.getName() << std::endl;
-	for (it = tmp_channel.begin(); it != tmp_channel.end(); it++)
-	{
-		std::cout << "Channels = " << it->second.getName() << std::endl;
-	}
+	// for (it = tmp_channel.begin(); it != tmp_channel.end(); it++)
+	// {
+	// 	std::cout << "Channels = " << it->second.getName() << std::endl;
+	// }
+	std::string l1 = "Ligue 1";
+	std::string l2 = "Rugby";
+	Client c2(4);
+	std::string errorstr = "jeff";
+	c2.setNickname("Dimitri");
+	// c2.setOperator(1);
+	s.join(c2, l1);
+	s.join(client, l1);
+	s.kick(c2, l1, client.getNickname());
+	s.printChannel(l1);
+	// s.quit(l1, c2.getNickname());
+	s.quit(l1, errorstr);
+	s.printChannel(l1);
+	s.join(client, l2);
+	s.printChannel(l2);
 	return (0);
 }

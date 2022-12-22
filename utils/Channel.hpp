@@ -8,14 +8,21 @@ class	Client;
 class Channel
 {
 	private:
-		std::map <std::string, Client> _clientList;
-		std::string _name;
+		std::map <std::string, Client>	_clientList;
+		std::vector<std::string>		_kicked;
+		std::vector<std::string>		_banned;
+		std::vector<std::string>		_admins;
+		std::string 					_name;
 	public:
 		Channel(std::string const &name);
 		~Channel();
 		std::string						getName()const;
 		std::map <std::string, Client>	getClientList()const;
+		int								findClient(std::string &clientName);
 		void							addClientToChannel(Client &client);
+		void							printClientList();
+		void							removeClientFromChannel(std::string &clientName);
+		// void							addOperator();
 };
 
 #endif
