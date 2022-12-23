@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server() : _servinfo(NULL), _server_socket_fd(0)
+Server::Server() : _servinfo(NULL), _server_socket_fd(0), _operatorPassword("pswd")
 {
 	std::cout << YELLOW << "Server Constructor" << RESET << std::endl;
 	memset(&_hints, 0, sizeof(_hints));

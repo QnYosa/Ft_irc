@@ -37,6 +37,7 @@ class Server
 		void		oper(std::string channelName, std::string operatorName, std::string password);
 	/*Display*/
 		void		printChannel(std::string &channelName);
+		void		printOper(std::string &channelName);
 };
 
 #endif

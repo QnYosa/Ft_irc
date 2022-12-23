@@ -73,16 +73,24 @@ void	Channel::addOperator(std::string operatorName)
 int 	Channel::isOperator(std::string &operatorName)
 {
 	std::vector<std::string>::iterator it;
-	for (it = _operators.begin(); it != _operators.end(); it++)
+	std::vector<std::string> copy;
+	copy = _operators;
+	if (_operators.empty())
+		return (FAILURE);
+	for (it = copy.begin(); it != copy.end(); it++)
 	{
 		if (*it == operatorName)
+		{
+			std::cout << "Hello\n";
 			return (SUCCESS);
+		}
 	}
 	return (FAILURE);
 }
 
 void	Channel::printOperators()
 {
+	std::cout << "Print operators\n";
 	std::vector<std::string>::iterator it;
 	for (it = _operators.begin(); it != _operators.end(); it++)
 	{

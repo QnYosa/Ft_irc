@@ -40,5 +40,9 @@ int main (void)
 	s.printChannel(l1);
 	s.join(client, l2);
 	s.printChannel(l2);
+	s.join(c2, l1);
+	s.oper("Ligue1", client.getNickname(), "pswd");
+	s.oper("Ligue 1", client.getNickname(), "pswd");
+	s.printOper(l1);
 	return (0);
 }

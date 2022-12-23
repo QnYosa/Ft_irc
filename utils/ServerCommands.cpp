@@ -84,6 +84,23 @@ void	Server::oper(std::string channelName, std::string operatorName, std::string
 	}
 	std::map<std::string, Channel>::iterator it;
 	it = _channels.find(channelName);
+	if (it == _channels.end())
+	{
+		std::cout << "That channel doesn't exist\n";
+		return ;
+	}
 	if (it->second.isOperator(operatorName) == FAILURE)
 		it->second.addOperator(operatorName);
+}
+
+void	Server::printOper(std::string &channelName)
+{
+	std::map<std::string, Channel>::iterator it;
+	it = _channels.find(channelName);
+	if (it == _channels.end())
+	{
+		std::cout << "That channel doesn't exit\n";
+		return ;
+	}
+	it->second.printOperators();
 }
