@@ -4,7 +4,7 @@ void	Server::addChannel(std::string const &channelName)
 {
 	// check if channel already exist.
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
-	if (it != _channels.end)
+	if (it != _channels.end())
 	{
 		std::cout << "Channel already exists, choose an other name\n";
 		return ;
@@ -32,6 +32,8 @@ void	Server::join(Client &client, std::string &channelName)
 	if (it == _channels.end())
 		this->addChannel(channelName);
 	addClientToChannel(channelName, client);
+	it->second.addFirstOperator(client.getNickname());
+	// add client to operators if empty.
 }
 
 void	Server::printChannel(std::string &channelName)
@@ -52,18 +54,36 @@ void	Server::quit(std::string &channelName, std::string &clientName)
 	}
 }
 
-void	Server::kick(Client &client, std::string &channelName, std::string &clientName)
+void	Server::kick(std::string &operatorName, std::string &channelName, std::string &clientName)
 {
-	if (client.getOperator() == 0)
-	{
-		std::cout << "You're not allowed to kick someone\n";
-		return ;
-	}
+	// if (client.getOperator() == 0)
+	// {
+	// 	std::cout << "You're not allowed to kick someone\n";
+	// 	return ;
+	// }
 	std::map<std::string, Channel>::iterator it;
 	it = _channels.find(channelName);
 	if (it->second.findClient(clientName) == SUCCESS)
 	{
+		if (it->second.isOperator(operatorName) == FAILURE)
+		{
+			std::cout << operatorName << " is not admin on " << channelName << std::endl;
+			return ;
+		}
 		it->second.removeClientFromChannel(clientName);
-		std::cout << clientName << " has been kicked from " << channelName << " by " << client.getNickname() <<std::endl; 
+		std::cout << clientName << " has been kicked from " << channelName << " by " << operatorName <<std::endl; 
 	}	
+}
+
+void	Server::oper(std::string channelName, std::string operatorName, std::string password)
+{
+	if (password != _operatorPassword)
+	{
+		std::cout << "Wrong Password\n";
+		return ;
+	}
+	std::map<std::string, Channel>::iterator it;
+	it = _channels.find(channelName);
+	if (it->second.isOperator(operatorName) == FAILURE)
+		it->second.addOperator(operatorName);
 }

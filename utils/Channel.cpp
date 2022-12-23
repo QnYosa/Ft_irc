@@ -39,6 +39,7 @@ void	Channel::removeClientFromChannel(std::string &clientName)
 	std::map <std::string, Client>::iterator it = this->_clientList.find(clientName);
 	if (it != _clientList.end())
 		this->_clientList.erase(it);
+	removeOperator(clientName);
 }
 
 void	Channel::printClientList()
@@ -46,4 +47,45 @@ void	Channel::printClientList()
 	std::cout << YELLOW << this->getName() << RESET << std::endl;
 	for (std::map <std::string, Client>::iterator it = _clientList.begin(); it != _clientList.end(); it++)
 		std::cout << it->first << std::endl;
+}
+
+void	Channel::addFirstOperator(std::string operatorName)
+{
+	if (_operators.empty())
+		_operators.push_back(operatorName);
+}
+
+void	Channel::removeOperator(std::string operatorName)
+{
+	std::vector<std::string>::iterator it;
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		if (*it == operatorName)
+			_operators.erase(it);
+	}
+}
+
+void	Channel::addOperator(std::string operatorName)
+{
+	_operators.push_back(operatorName);
+}
+
+int 	Channel::isOperator(std::string &operatorName)
+{
+	std::vector<std::string>::iterator it;
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		if (*it == operatorName)
+			return (SUCCESS);
+	}
+	return (FAILURE);
+}
+
+void	Channel::printOperators()
+{
+	std::vector<std::string>::iterator it;
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
 }

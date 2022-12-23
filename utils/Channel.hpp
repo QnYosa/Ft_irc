@@ -11,7 +11,7 @@ class Channel
 		std::map <std::string, Client>	_clientList;
 		std::vector<std::string>		_kicked;
 		std::vector<std::string>		_banned;
-		std::vector<std::string>		_admins;
+		std::vector<std::string>		_operators;
 		std::string 					_name;
 	public:
 		Channel(std::string const &name);
@@ -22,7 +22,12 @@ class Channel
 		void							addClientToChannel(Client &client);
 		void							printClientList();
 		void							removeClientFromChannel(std::string &clientName);
-		// void							addOperator();
+		/*								OPERATORS					*/
+		void							addFirstOperator(std::string operatorName);
+		void							removeOperator(std::string operatoName);
+		void							addOperator(std::string operatorName);
+		int								isOperator(std::string &operatorName);
+		void							printOperators();
 };
 
 #endif

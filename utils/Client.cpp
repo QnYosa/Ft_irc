@@ -5,7 +5,7 @@
 // 	std::cout << YELLOW << "Client constructor" << RESET << std::endl;
 // }
 
-Client::Client(int client_fd) : _client_fd(client_fd), _ready(0), _operator(0)
+Client::Client(int client_fd) : _client_fd(client_fd), _ready(0)//, _operator(0)
 {
 	// std::cout << YELLOW << "Client constructor" << RESET << std::endl;
 }
@@ -65,12 +65,12 @@ int				Client::is_valid()const
 	return (SUCCESS);
 }
 
-void			Client::setOperator(int n)
-{
-	_operator = n;
-}
+// void			Client::setOperator(int n)
+// {
+// 	_operator = n;
+// }
 
-int				Client::getOperator()const
-{
-	return (_operator);
-}
+// int				Client::getOperator()const
+// {
+// 	return (_operator);
+// }

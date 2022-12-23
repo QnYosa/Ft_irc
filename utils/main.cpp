@@ -33,7 +33,7 @@ int main (void)
 	// c2.setOperator(1);
 	s.join(c2, l1);
 	s.join(client, l1);
-	s.kick(c2, l1, client.getNickname());
+	s.kick(c2.getNickname(), l1, client.getNickname());
 	s.printChannel(l1);
 	// s.quit(l1, c2.getNickname());
 	s.quit(l1, errorstr);

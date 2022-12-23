@@ -15,7 +15,8 @@ class Server
 		std::map<const int, Client>		_clients;
 		std::map<const int, Client>		_tmpClients;
 		int								_server_socket_fd;
-		std::map<std::string, Channel> _channels;
+		std::map<std::string, Channel>	_channels;
+		std::string						_operatorPassword;
 	public:
 		Server();
 		~Server();
@@ -32,7 +33,8 @@ class Server
 	/* Server Commands */
 		void		join(Client &client, std::string &channelName);
 		void		quit(std::string &channelName, std::string &clientName);
-		void		kick(Client &client, std::string &channelName, std::string &clientName);
+		void		kick(std::string &operatorName, std::string &channelName, std::string &clientName);
+		void		oper(std::string channelName, std::string operatorName, std::string password);
 	/*Display*/
 		void		printChannel(std::string &channelName);
 };
