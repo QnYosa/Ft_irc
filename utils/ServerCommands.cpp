@@ -31,9 +31,13 @@ void	Server::join(Client &client, std::string &channelName)
 	std::map<std::string, Channel>::iterator it = _channels.find(channelName);
 	if (it == _channels.end())
 		this->addChannel(channelName);
+	if (it->second.isBanned(client.getNickname()) == SUCCESS)
+	{
+		std::cout << client.getNickname() << " is banned from " << channelName << std::endl; 
+		return ;
+	}
 	addClientToChannel(channelName, client);
 	it->second.addFirstOperator(client.getNickname());
-	// add client to operators if empty.
 }
 
 void	Server::printChannel(std::string &channelName)
@@ -61,11 +65,6 @@ void	Server::quit(std::string &channelName, std::string &clientName)
 
 void	Server::kick(std::string &operatorName, std::string &channelName, std::string &clientName)
 {
-	// if (client.getOperator() == 0)
-	// {
-	// 	std::cout << "You're not allowed to kick someone\n";
-	// 	return ;
-	// }
 	std::map<std::string, Channel>::iterator it;
 	it = _channels.find(channelName);
 	if (it->second.findClient(clientName) == SUCCESS)
@@ -77,6 +76,22 @@ void	Server::kick(std::string &operatorName, std::string &channelName, std::stri
 		}
 		it->second.removeClientFromChannel(clientName);
 		std::cout << clientName << " has been kicked from " << channelName << " by " << operatorName <<std::endl; 
+	}	
+}
+
+void	Server::ban(std::string &operatorName, std::string &channelName, std::string &clientName)
+{
+	std::map<std::string, Channel>::iterator it;
+	it = _channels.find(channelName);
+	if (it->second.findClient(clientName) == SUCCESS)
+	{
+		if (it->second.isOperator(operatorName) == FAILURE)
+		{
+			std::cout << operatorName << " is not admin on " << channelName << std::endl;
+			return ;
+		}
+		it->second.removeClientFromChannel(clientName);
+		std::cout << clientName << " has been banned from " << channelName << " by " << operatorName <<std::endl; 
 	}	
 }
 

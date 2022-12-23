@@ -9,7 +9,6 @@ class Channel
 {
 	private:
 		std::map <std::string, Client>	_clientList;
-		std::vector<std::string>		_kicked;
 		std::vector<std::string>		_banned;
 		std::vector<std::string>		_operators;
 		std::string 					_name;
@@ -28,6 +27,9 @@ class Channel
 		void							addOperator(std::string operatorName);
 		int								isOperator(std::string &operatorName);
 		void							printOperators();
+		/*								FILL VECTORS				*/
+		void							addToBanned(std::string &bannedName);
+		int								isBanned(std::string &banned_name);
 };
 
 #endif

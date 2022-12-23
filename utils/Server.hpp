@@ -34,6 +34,7 @@ class Server
 		void		join(Client &client, std::string &channelName);
 		void		quit(std::string &channelName, std::string &clientName);
 		void		kick(std::string &operatorName, std::string &channelName, std::string &clientName);
+		void		ban(std::string &operatorName, std::string &channelName, std::string &clientName);
 		void		oper(std::string channelName, std::string operatorName, std::string password);
 	/*Display*/
 		void		printChannel(std::string &channelName);

@@ -38,6 +38,7 @@ int main (void)
 	// s.quit(l1, c2.getNickname());
 	s.quit(l1, errorstr);
 	s.printChannel(l1);
+	std::cout << "Hello\n";
 	s.join(client, l2);
 	s.printChannel(l2);
 	s.join(c2, l1);

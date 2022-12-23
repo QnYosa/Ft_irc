@@ -78,10 +78,7 @@ int 	Channel::isOperator(std::string &operatorName)
 	for (it = _operators.begin(); it != _operators.end(); it++)
 	{
 		if (*it == operatorName)
-		{
-			std::cout << "Hello\n";
 			return (SUCCESS);
-		}
 	}
 	return (FAILURE);
 }
@@ -94,4 +91,32 @@ void	Channel::printOperators()
 	{
 		std::cout << *it << std::endl;
 	}
+}
+
+void	Channel::addToBanned(std::string &bannedName)
+{
+	std::vector<std::string>::iterator it;
+	for (it = _operators.begin(); it != _operators.end(); it++)
+	{
+		if (*it == bannedName)
+		{
+			std::cout << bannedName << " is already banned from " << getName() << std::endl;
+			return ;
+		}
+	}
+	std::cout << bannedName << " is now banned from " << getName() << std::endl;
+	_operators.push_back(bannedName);
+}
+
+int		Channel::isBanned(std::string &banned_name)
+{
+	std::vector<std::string>::iterator it;
+	if (_banned.empty())
+		return (FAILURE);
+	for (it = _banned.begin(); it != _banned.end(); it++)
+	{
+		if (*it == banned_name)
+			return (SUCCESS);
+	}
+	return (FAILURE);	
 }
