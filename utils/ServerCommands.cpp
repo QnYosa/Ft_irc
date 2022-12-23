@@ -47,6 +47,11 @@ void	Server::quit(std::string &channelName, std::string &clientName)
 {
 	std::map<std::string, Channel>::iterator it;
 	it = _channels.find(channelName);
+	if (it == _channels.end())
+	{
+		std::cout << "Channel not found\n";
+		return ;
+	}
 	if (it->second.findClient(clientName) == SUCCESS)
 	{
 		it->second.removeClientFromChannel(clientName);

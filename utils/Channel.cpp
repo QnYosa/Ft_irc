@@ -67,17 +67,15 @@ void	Channel::removeOperator(std::string operatorName)
 
 void	Channel::addOperator(std::string operatorName)
 {
-	_operators.push_back(operatorName);
+	// _operators.push_back(operatorName);
 }
 
 int 	Channel::isOperator(std::string &operatorName)
 {
 	std::vector<std::string>::iterator it;
-	std::vector<std::string> copy;
-	copy = _operators;
 	if (_operators.empty())
 		return (FAILURE);
-	for (it = copy.begin(); it != copy.end(); it++)
+	for (it = _operators.begin(); it != _operators.end(); it++)
 	{
 		if (*it == operatorName)
 		{

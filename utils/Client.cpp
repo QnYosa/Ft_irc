@@ -64,13 +64,3 @@ int				Client::is_valid()const
 		return (FAILURE);
 	return (SUCCESS);
 }
-
-// void			Client::setOperator(int n)
-// {
-// 	_operator = n;
-// }
-
-// int				Client::getOperator()const
-// {
-// 	return (_operator);
-// }
