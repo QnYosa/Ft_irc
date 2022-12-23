@@ -93,19 +93,34 @@ void	Channel::printOperators()
 	}
 }
 
-void	Channel::addToBanned(std::string &bannedName)
+void	Channel::addToBanned(std::string &banned_name)
 {
 	std::vector<std::string>::iterator it;
-	for (it = _operators.begin(); it != _operators.end(); it++)
+	for (it = _banned.begin(); it != _banned.end(); it++)
 	{
-		if (*it == bannedName)
+		if (*it == banned_name)
 		{
-			std::cout << bannedName << " is already banned from " << getName() << std::endl;
+			std::cout << banned_name << " is already banned from " << getName() << std::endl;
 			return ;
 		}
 	}
-	std::cout << bannedName << " is now banned from " << getName() << std::endl;
-	_operators.push_back(bannedName);
+	_banned.push_back(banned_name);
+	std::cout << banned_name << " is now banned from " << getName() << std::endl;
+}
+
+void	Channel::removeFromBanned(std::string &banned_name)
+{
+	std::vector<std::string>::iterator it;
+	for (it = _banned.begin(); it != _banned.end(); it++)
+	{
+		if (*it == banned_name)
+		{
+			_banned.erase(it);
+			std::cout << banned_name << " is back to " << getName() << std::endl;
+			return ;
+		}
+	}
+	std::cout << banned_name << " wasnt banned from " << getName() << std::endl;
 }
 
 int		Channel::isBanned(std::string &banned_name)

@@ -28,7 +28,8 @@ class Channel
 		int								isOperator(std::string &operatorName);
 		void							printOperators();
 		/*								FILL VECTORS				*/
-		void							addToBanned(std::string &bannedName);
+		void							addToBanned(std::string &banned_name);
+		void							removeFromBanned(std::string &banned_name)
 		int								isBanned(std::string &banned_name);
 };
 

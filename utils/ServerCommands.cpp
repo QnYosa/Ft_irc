@@ -91,7 +91,25 @@ void	Server::ban(std::string &operatorName, std::string &channelName, std::strin
 			return ;
 		}
 		it->second.removeClientFromChannel(clientName);
+		it->second.addToBanned(clientName);
 		std::cout << clientName << " has been banned from " << channelName << " by " << operatorName <<std::endl; 
+	}	
+}
+
+void	Server::unban(std::string &operatorName, std::string &channelName, std::string &unbanned_name)
+{
+	std::map<std::string, Channel>::iterator it;
+	it = _channels.find(channelName);
+	if (it->second.findClient(unbanned_name) == SUCCESS)
+	{
+		if (it->second.isOperator(operatorName) == FAILURE)
+		{
+			std::cout << operatorName << " is not admin on " << channelName << std::endl;
+			return ;
+		}
+		it->second.addClientToChannel(unbanned_name);
+		it->second.removeFromBanned(unbanned_name)
+		std::cout << unbanned_name << " has been unbanned from " << channelName << " by " << operatorName <<std::endl; 
 	}	
 }
 
